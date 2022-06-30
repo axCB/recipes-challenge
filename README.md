@@ -1,7 +1,6 @@
 # Recipes
 
-This is standalone java application which allows users to manage their favourite recipes.
-It allows adding, updating, removing and fetching recipes.
+This java application allows users to manage their favourite recipes by adding, updating, removing and fetching recipes.
 Available recipes can be filtered based on one or more of the following criteria:
 
 1. Whether or not the dish is vegetarian
