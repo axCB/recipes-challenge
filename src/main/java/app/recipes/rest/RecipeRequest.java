@@ -3,15 +3,19 @@ package app.recipes.rest;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
 public class RecipeRequest {
-  private final String name;
-  private final RecipeType type;
-  private final Integer servings;
-  private final Map<String, String> ingredients;
-  private final List<String> instructions;
+  private final @NotBlank String name;
+  private final @NotNull RecipeType type;
+  private final @NotNull @Min(value = 1) Integer servings;
+  private final @NotEmpty Map<String, String> ingredients;
+  private final @NotEmpty List<String> instructions;
 
   @JsonCreator
   public RecipeRequest(

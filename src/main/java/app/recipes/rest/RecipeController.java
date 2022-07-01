@@ -1,10 +1,11 @@
 package app.recipes.rest;
 
 import app.recipes.RecipeService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/recipes")
@@ -15,9 +16,11 @@ public class RecipeController {
     this.recipesService = recipesService;
   }
 
-  @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-  @ResponseStatus(CREATED)
-  public RecipeResponse createRecipe(@RequestBody RecipeRequest recipeRequest) {
+  @PostMapping(
+      produces = MediaType.APPLICATION_JSON_VALUE,
+      consumes = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseStatus(HttpStatus.CREATED)
+  public RecipeResponse createRecipe(@Valid @RequestBody RecipeRequest recipeRequest) {
     return recipesService.createRecipe(recipeRequest);
   }
 }

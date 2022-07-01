@@ -6,6 +6,8 @@ import app.recipes.rest.RecipeResponse;
 import app.recipes.rest.RecipeType;
 
 public class RecipeConverter {
+  private RecipeConverter() {}
+
   public static Recipe toRecipe(RecipeRequest request) {
     Recipe recipe = new Recipe();
 
