@@ -37,7 +37,7 @@ public class RecipeServiceTest {
     recipe.setId("328382808047hd32");
     when(recipeRepository.insert(any(Recipe.class))).thenReturn(recipe);
 
-    RecipeResponse recipeResponse = recipeService.createRecipe(request);
+    RecipeResponse recipeResponse = recipeService.create(request);
     assertThat(recipeResponse.getId()).isNotNull();
     assertThat(recipeResponse.getIngredients()).isEqualTo(request.getIngredients());
     assertThat(recipeResponse.getName()).isEqualTo(request.getName());
