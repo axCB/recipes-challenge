@@ -1,10 +1,14 @@
-package app.recipes.converter;
+package app.recipes;
 
 import app.recipes.persistence.Recipe;
 import app.recipes.rest.RecipeRequest;
 import app.recipes.rest.RecipeResponse;
 import app.recipes.rest.RecipeType;
 
+/**
+ * Class for converting between RecipeRequest and Recipe document and Recipe document and
+ * RecipeResponse.
+ */
 public class RecipeConverter {
   private RecipeConverter() {}
 

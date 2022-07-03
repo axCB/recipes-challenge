@@ -1,6 +1,5 @@
 package app.recipes;
 
-import app.recipes.converter.RecipeConverter;
 import app.recipes.persistence.Recipe;
 import app.recipes.persistence.RecipeRepository;
 import app.recipes.rest.RecipeRequest;
@@ -11,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/** Service class for Recipes operations such as create, update, delete, findById, findAll. */
 @Service
 public class RecipeService {
   private final RecipeRepository recipeRepository;

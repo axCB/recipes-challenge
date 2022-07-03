@@ -1,6 +1,5 @@
 package app.recipes;
 
-import app.recipes.converter.RecipeConverter;
 import app.recipes.persistence.Recipe;
 import app.recipes.persistence.RecipeRepository;
 import app.recipes.rest.RecipeRequest;
