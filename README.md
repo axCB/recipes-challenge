@@ -25,21 +25,56 @@ Project has the following structure:
   database
 * package `app.recipes.rest` - package with RecipeController class and definitions of request and response objects
 
-#### Run application
+#### Run application steps
 
 1. Run **./mvnw clean package**. This will create the executable .jar inside the target folder.
 2. Run **java -jar target/recipes-challenge-1.0.0.jar** to start app the application.
 3. Once the application is up, the API will be accessible under http://localhost:8080/recipes
 
-#### Endpoint design specifications
+#### APIs design specifications
 
-* Create recipe: ;
-  `POST 'http://localhost:8080/recipes'` with body of type RecipeRequest
-* Update recipe
-  `PUT 'http://localhost:8080/recipes/{recipeId}'` with body of type RecipeRequest
-* Delete recipe
-  `DELETE 'http://localhost:8080/recipes/{recipeId}`
-* Get by recipeId
-  `GET 'http://localhost:8080/recipes/{recipeId}`
-* Get all
-  `GET 'http://localhost:8080/recipes`
+Current APIs does not accept pagination or sorting, and they don't return the hypermedia links that will inform what
+operations are available for each resource and how to access that information. (further improvements + cleanup).
+<p>
+Example of postman collection can be found in `src/main/resources/Recipes.postman_collection.json`
+
+* **Create recipe**: ;
+  `POST 'http://localhost:8080/recipes'` api also requires RecipeRequest in the body
+* **Update recipe**
+  `PUT 'http://localhost:8080/recipes/{recipeId}'` where recipeId is the id of an existing recipe; api also requires
+  RecipeRequest in the body
+* **Delete recipe**
+  `DELETE 'http://localhost:8080/recipes/{recipeId}` where recipeId is the id of an existing recipe
+* **Get by recipeId**
+  `GET 'http://localhost:8080/recipes/{recipeId}` where recipeId is the id of an existing recipe
+* **Get all**
+  `GET 'http://localhost:8080/recipes` accepts following optional filters:
+    * type: one of: STANDARD, PESCETERIAN, LACTO_VEGETARIAN, OVO_VEGETARIAN, VEGETARIAN, VEGAN
+    * servings: of type int
+    * include-ingredients: list of strings
+    * exclude-ingredients: list of strings
+    * instruction-words: string
+
+**RecipeRequest** has the following structure:
+
+|      Field      |        Type        |     Description      |
+|:---------------:|:------------------:|:--------------------:|
+|     `name`      |       String       |     Recipe name      |
+|     `type`      |     RecipeType     |    Type of recipe    |
+|   `servings`    |      Integer       |  Number of servings  |
+|  `ingredients`  | MeasuredIngredient | List of ingredients  |
+| `instructions ` |    List<String>    | List of instructions |
+
+**RecipeType** is one of:   STANDARD, PESCETERIAN, LACTO_VEGETARIAN, OVO_VEGETARIAN, VEGETARIAN, VEGAN
+
+**MeasuredIngredient** has the following structure:
+
+|      Field      |             Type              |       Description       |
+|:---------------:|:-----------------------------:|:-----------------------:|
+|     `name`      |            String             |  Ingredient name        |
+|     `unit`      |      MeasurementUnitType      |        Unit type        |
+|    `value`      |            Integer            |      Double value       |
+
+**RecipeType** is one of:  GRAMS, MILLILITERS, PIECES
+
+**RecipeResponse** follows same structure as the request but it also contains the id of the returned request
