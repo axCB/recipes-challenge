@@ -1,9 +1,11 @@
 package app.recipes;
 
+import app.recipes.persistence.CustomRecipeRepository;
 import app.recipes.persistence.Recipe;
 import app.recipes.persistence.RecipeRepository;
 import app.recipes.rest.RecipeRequest;
 import app.recipes.rest.RecipeResponse;
+import app.recipes.rest.RecipeType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +16,12 @@ import java.util.stream.Collectors;
 @Service
 public class RecipeService {
   private final RecipeRepository recipeRepository;
+  private final CustomRecipeRepository customRecipeRepository;
 
-  public RecipeService(RecipeRepository recipeRepository) {
+  public RecipeService(
+      RecipeRepository recipeRepository, CustomRecipeRepository customRecipeRepository) {
     this.recipeRepository = recipeRepository;
+    this.customRecipeRepository = customRecipeRepository;
   }
 
   public RecipeResponse create(RecipeRequest recipeRequest) {
@@ -30,7 +35,15 @@ public class RecipeService {
     recipeToBeUpdated.setName(recipeRequest.getName());
     recipeToBeUpdated.setType(Recipe.RecipeType.valueOf(recipeRequest.getType().name()));
     recipeToBeUpdated.setServings(recipeRequest.getServings());
-    recipeToBeUpdated.setIngredients(recipeRequest.getIngredients());
+    recipeToBeUpdated.setIngredients(
+        recipeRequest.getIngredients().stream()
+            .map(
+                i ->
+                    new Recipe.MeasuredIngredient(
+                        i.getName(),
+                        Recipe.MeasurementUnitType.valueOf(i.getUnitType().name()),
+                        i.getValue()))
+            .collect(Collectors.toList()));
     recipeToBeUpdated.setInstructions(recipeRequest.getInstructions());
     Recipe createdRecipe = recipeRepository.save(recipeToBeUpdated);
     return RecipeConverter.toRecipeResponse(createdRecipe);
@@ -49,6 +62,24 @@ public class RecipeService {
   public List<RecipeResponse> findAll() {
     List<Recipe> recipeResponse = recipeRepository.findAll();
     return recipeResponse.stream()
+        .map(RecipeConverter::toRecipeResponse)
+        .collect(Collectors.toList());
+  }
+
+  public List<RecipeResponse> findAllByFilters(
+      RecipeType recipeType,
+      Integer servings,
+      List<String> includedIngredients,
+      List<String> excludedIngredients,
+      String instructionsSearchKey) {
+    return customRecipeRepository
+        .findByFilter(
+            servings,
+            Recipe.RecipeType.valueOf(recipeType.name()),
+            includedIngredients,
+            excludedIngredients,
+            instructionsSearchKey)
+        .stream()
         .map(RecipeConverter::toRecipeResponse)
         .collect(Collectors.toList());
   }

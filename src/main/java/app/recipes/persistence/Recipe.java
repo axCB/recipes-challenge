@@ -4,7 +4,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
-import java.util.Map;
 
 @Document("recipes")
 public class Recipe {
@@ -12,7 +11,7 @@ public class Recipe {
   private String name;
   private RecipeType type;
   private Integer servings;
-  private Map<String, String> ingredients;
+  private List<MeasuredIngredient> ingredients;
   private List<String> instructions;
 
   public Recipe() {}
@@ -49,11 +48,11 @@ public class Recipe {
     this.servings = servings;
   }
 
-  public Map<String, String> getIngredients() {
+  public List<MeasuredIngredient> getIngredients() {
     return ingredients;
   }
 
-  public void setIngredients(Map<String, String> ingredients) {
+  public void setIngredients(List<MeasuredIngredient> ingredients) {
     this.ingredients = ingredients;
   }
 
@@ -63,6 +62,36 @@ public class Recipe {
 
   public void setInstructions(List<String> instructions) {
     this.instructions = instructions;
+  }
+
+  public static class MeasuredIngredient {
+    private final String name;
+    private final MeasurementUnitType unitType;
+    private final Double value;
+
+    public MeasuredIngredient(String name, MeasurementUnitType unitType, Double value) {
+      this.name = name;
+      this.unitType = unitType;
+      this.value = value;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public MeasurementUnitType getUnitType() {
+      return unitType;
+    }
+
+    public Double getValue() {
+      return value;
+    }
+  }
+
+  public enum MeasurementUnitType {
+    GRAMS,
+    MILLILITERS,
+    PIECES
   }
 
   public enum RecipeType {

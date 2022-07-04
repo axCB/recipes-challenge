@@ -1,9 +1,9 @@
 package app.recipes;
 
 import app.recipes.persistence.Recipe;
-import app.recipes.rest.RecipeRequest;
-import app.recipes.rest.RecipeResponse;
-import app.recipes.rest.RecipeType;
+import app.recipes.rest.*;
+
+import java.util.stream.Collectors;
 
 /**
  * Class for converting between RecipeRequest and Recipe document and Recipe document and
@@ -18,7 +18,15 @@ public class RecipeConverter {
     recipe.setName(request.getName());
     recipe.setType(Recipe.RecipeType.valueOf(request.getType().name()));
     recipe.setServings(request.getServings());
-    recipe.setIngredients(request.getIngredients());
+    recipe.setIngredients(
+        request.getIngredients().stream()
+            .map(
+                i ->
+                    new Recipe.MeasuredIngredient(
+                        i.getName(),
+                        Recipe.MeasurementUnitType.valueOf(i.getUnitType().name()),
+                        i.getValue()))
+            .collect(Collectors.toList()));
     recipe.setInstructions(request.getInstructions());
     return recipe;
   }
@@ -29,7 +37,14 @@ public class RecipeConverter {
         recipe.getName(),
         RecipeType.valueOf(recipe.getType().name()),
         recipe.getServings(),
-        recipe.getIngredients(),
+        recipe.getIngredients().stream()
+            .map(
+                i ->
+                    new MeasuredIngredient(
+                        i.getName(),
+                        MeasurementUnitType.valueOf(i.getUnitType().name()),
+                        i.getValue()))
+            .collect(Collectors.toList()),
         recipe.getInstructions());
   }
 }

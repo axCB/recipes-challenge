@@ -4,14 +4,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
-import java.util.Map;
 
 public class RecipeResponse {
   private final String id;
   private final String name;
   private final RecipeType type;
   private final Integer servings;
-  private final Map<String, String> ingredients;
+  private final List<MeasuredIngredient> ingredients;
   private final List<String> instructions;
 
   @JsonCreator
@@ -20,7 +19,7 @@ public class RecipeResponse {
       @JsonProperty("name") String name,
       @JsonProperty("type") RecipeType type,
       @JsonProperty("servings") Integer servings,
-      @JsonProperty("ingredients") Map<String, String> ingredients,
+      @JsonProperty("ingredients") List<MeasuredIngredient> ingredients,
       @JsonProperty("instructions") List<String> instructions) {
     this.id = id;
     this.name = name;
@@ -46,7 +45,7 @@ public class RecipeResponse {
     return servings;
   }
 
-  public Map<String, String> getIngredients() {
+  public List<MeasuredIngredient> getIngredients() {
     return ingredients;
   }
 
