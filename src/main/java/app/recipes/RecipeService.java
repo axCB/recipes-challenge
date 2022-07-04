@@ -1,5 +1,6 @@
 package app.recipes;
 
+import app.recipes.exceptions.custom.NotFoundException;
 import app.recipes.persistence.CustomRecipeRepository;
 import app.recipes.persistence.Recipe;
 import app.recipes.persistence.RecipeRepository;
@@ -59,36 +60,28 @@ public class RecipeService {
     return RecipeConverter.toRecipeResponse(createdRecipe);
   }
 
-  public List<RecipeResponse> findAll() {
-    List<Recipe> recipeResponse = recipeRepository.findAll();
-    return recipeResponse.stream()
-        .map(RecipeConverter::toRecipeResponse)
-        .collect(Collectors.toList());
-  }
-
   public List<RecipeResponse> findAllByFilters(
       RecipeType recipeType,
       Integer servings,
       List<String> includedIngredients,
       List<String> excludedIngredients,
       String instructionsSearchKey) {
+    Recipe.RecipeType type =
+        recipeType != null ? Recipe.RecipeType.valueOf(recipeType.name()) : null;
     return customRecipeRepository
         .findByFilter(
-            servings,
-            Recipe.RecipeType.valueOf(recipeType.name()),
-            includedIngredients,
-            excludedIngredients,
-            instructionsSearchKey)
+            servings, type, includedIngredients, excludedIngredients, instructionsSearchKey)
         .stream()
         .map(RecipeConverter::toRecipeResponse)
         .collect(Collectors.toList());
   }
 
   private Recipe getRecipe(String id) {
-    Optional<Recipe> createdRecipe = recipeRepository.findById(id);
-    if (createdRecipe.isEmpty()) {
-      throw new RuntimeException("Not found");
+    Optional<Recipe> recipe = recipeRepository.findById(id);
+    if (recipe.isEmpty()) {
+      String notFoundErrorMessage = String.format("Recipe with id %s was not found", id);
+      throw new NotFoundException(notFoundErrorMessage);
     }
-    return createdRecipe.get();
+    return recipe.get();
   }
 }

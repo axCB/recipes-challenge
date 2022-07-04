@@ -80,13 +80,28 @@ public class RecipeController {
   }
 
   /**
-   * Returns all recipes that exists.
+   * Returns all recipes matching provided filters. When multiple filters are specified an 'and'
+   * relation exists. When no filter are specified this method will return all recipes.
    *
-   * @return a list of recipes that exists.
+   * @param recipeType - representing type of recipe
+   * @param servings - representing number of servings of a recipe
+   * @param includeIngredients - list containing ingredients that a recipe must contain
+   * @param excludeIngredients - list containing ingredients that a recipe must exclude
+   * @param instructionWords - string representing a word that must appear inside instructions.
+   * @return a list of recipes that match the provided filters.
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @ResponseStatus(HttpStatus.OK)
-  public List<RecipeResponse> findAll() {
-    return recipesService.findAll();
+  public List<RecipeResponse> findAll(
+      @RequestParam(value = "type", required = false) RecipeType recipeType,
+      @RequestParam(value = "servings", required = false) Integer servings,
+      @RequestParam(value = "include-ingredients", required = false)
+          List<String> includeIngredients,
+      @RequestParam(value = "exclude-ingredients", required = false)
+          List<String> excludeIngredients,
+      @RequestParam(value = "instruction-words", required = false) String instructionWords) {
+
+    return recipesService.findAllByFilters(
+        recipeType, servings, includeIngredients, excludeIngredients, instructionWords);
   }
 }
