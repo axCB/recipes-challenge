@@ -6,11 +6,11 @@ server:
 spring:
   mongodb:
     embedded:
-      version: 3.4.1
+      version: 3.4.0
   data:
     mongodb:
-      uri: mongodb://localhost:27017/test
-      auto-index-creation: true
+      port: 27017
+      database: test
   jackson:
     default-property-inclusion: NON_NULL
 

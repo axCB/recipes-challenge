@@ -15,7 +15,6 @@
 
         <spring.boot.version>2.7.1</spring.boot.version>
         <de.flapdoodle.embed.mongo.version>3.4.6</de.flapdoodle.embed.mongo.version>
-        <version.embedmongo.plugin>0.4.1</version.embedmongo.plugin>
     </properties>
 
     <dependencies>
