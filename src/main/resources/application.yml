@@ -13,10 +13,3 @@ spring:
       database: recipe
   jackson:
     default-property-inclusion: NON_NULL
-
-
-
-management:
-  endpoints:
-    web:
-      base-path: /
